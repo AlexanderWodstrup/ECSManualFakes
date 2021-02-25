@@ -19,8 +19,6 @@ namespace ECS.Test.ManualFakes
             _heater = Substitute.For<IHeater>();
             _tempSensor = Substitute.For<ITempSensor>();
 
-            _fakeHeater = new FakeHeater();
-            _fakeTempSensor = new FakeTempSensor();
             _uut = new ECS(_tempSensor, _heater, 25);
         }
 
@@ -29,7 +27,7 @@ namespace ECS.Test.ManualFakes
         public void Regulate_TempIsLow_HeaterIsTurnedOn()
         {
             // Setup stub with desired response
-            _fakeTempSensor.Temp = 20;
+            _tempSensor.GetTemp().Returns(20);
             // Act
             _uut.Regulate();
 
