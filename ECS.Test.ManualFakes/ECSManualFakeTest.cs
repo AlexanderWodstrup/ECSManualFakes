@@ -7,8 +7,6 @@ namespace ECS.Test.ManualFakes
     [TestFixture]
     public class EcsManualFakeTest
     {
-        private FakeHeater _fakeHeater;
-        private FakeTempSensor _fakeTempSensor;
         private ECS _uut;
         private IHeater _heater;
         private ITempSensor _tempSensor;
@@ -19,8 +17,6 @@ namespace ECS.Test.ManualFakes
             _heater = Substitute.For<IHeater>();
             _tempSensor = Substitute.For<ITempSensor>();
 
-            _fakeHeater = new FakeHeater();
-            _fakeTempSensor = new FakeTempSensor();
             _uut = new ECS(_tempSensor, _heater, 25);
         }
 
@@ -29,12 +25,11 @@ namespace ECS.Test.ManualFakes
         public void Regulate_TempIsLow_HeaterIsTurnedOn()
         {
             // Setup stub with desired response
-            _fakeTempSensor.Temp = 20;
+            _tempSensor.GetTemp().Returns(20);
             // Act
             _uut.Regulate();
-
             // Assert on the mock - was the heater called correctly
-            Assert.That(_fakeHeater.TurnOnCalledTimes, Is.EqualTo(1));
+            _heater.Received(1).TurnOn();
         }
 
         #endregion
